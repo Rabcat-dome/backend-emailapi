@@ -1,4 +1,11 @@
-﻿namespace PTTDigital.Email.Api.Provider.Swagger;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace PTTDigital.Email.Api.Provider.Swagger;
 
 internal static class SwaggerGenServiceProviderExtension
 {

@@ -1,4 +1,7 @@
-﻿namespace PTTDigital.Email.Api.Provider.Swagger;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Swashbuckle.AspNetCore.SwaggerUI;
+
+namespace PTTDigital.Email.Api.Provider.Swagger;
 
 internal static class SwaggerGenApplicationBuilderExtension
 {

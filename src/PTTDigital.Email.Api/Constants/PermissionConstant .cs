@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Api.Constants;
+﻿using System.Reflection;
+
+namespace PTTDigital.Email.Api.Constants;
 
 internal class PermissionConstant : IPermissionConstant
 {
