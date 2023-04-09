@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Common.Helper.LogExtension;
+﻿using Microsoft.Extensions.Logging;
+
+namespace PTTDigital.Email.Common.Helper.LogExtension;
 
 public static class LogEvents
 {

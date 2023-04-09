@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using PTTDigital.Email.Common.ApplicationUser.User;
 
 namespace PTTDigital.Email.Common.Helper.LogExtension;
 

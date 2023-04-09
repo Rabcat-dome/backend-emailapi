@@ -1,4 +1,13 @@
-﻿namespace PTTDigital.Email.Common.ApplicationUser.User;
+﻿using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
+using PTTDigital.Email.Common.ApplicationUser.TaskStore;
+using PTTDigital.Email.Common.Configuration.AppSetting.API.AuthenticationConstant;
+
+namespace PTTDigital.Email.Common.ApplicationUser.User;
 
 public class ApplicationUser : IApplicationUser
 {
