@@ -14,93 +14,93 @@ image:
 imagePullSecrets:
   - acr-secret
 
-nameOverride: do66001-ppe-be-ppe-online-authentication-dev
-fullnameOverride: do66001-ppe-be-ppe-online-authentication-dev
+nameOverride: do66001-ppe-be-ppe-online-email-dev
+fullnameOverride: do66001-ppe-be-ppe-online-email-dev
 
 env:
-  - name: PTT_PPE_AUTHENTICATION_API_AppId
+  - name: PTT_PPE_EMAIL_API_AppId
     value: "01GWB8DB47JB3HAT6XX0TBSQBD"
     
-  - name: PTT_PPE_AUTHENTICATION_API_AppName
+  - name: PTT_PPE_EMAIL_API_AppName
     value: "Authorization API"
     
-  - name: PTT_PPE_AUTHENTICATION_API_SymmetricKey
+  - name: PTT_PPE_EMAIL_API_SymmetricKey
     value: "P@ssw0rd"
     
-  - name: PTT_PPE_AUTHENTICATION_API_Authorization__JwtSecret
+  - name: PTT_PPE_EMAIL_API_Authorization__JwtSecret
     value: "819C31CB-8EEF-437B-ADDC-C40FAF725ADA"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ClientConfigs__AccessTokenExpireInMinutes
+  - name: PTT_PPE_EMAIL_API_ClientConfigs__AccessTokenExpireInMinutes
     value: 30
     
-  - name: PTT_PPE_AUTHENTICATION_API_ClientConfigs__RefreshTokenLifeTimeInMinutes
+  - name: PTT_PPE_EMAIL_API_ClientConfigs__RefreshTokenLifeTimeInMinutes
     value: 60
     
-  - name: PTT_PPE_AUTHENTICATION_API_ClientConfigs__SessionTokenExpireInHour
+  - name: PTT_PPE_EMAIL_API_ClientConfigs__SessionTokenExpireInHour
     value: 24
     
-  - name: PTT_PPE_AUTHENTICATION_API_UseInMemory
+  - name: PTT_PPE_EMAIL_API_UseInMemory
     value: false
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__AppName
-    value: "Authorization API"
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__AppName
+    value: "EMAIL API"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__Host
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__Host
     value: "pttgc-poc.database.windows.net"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__Port
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__Port
     value: 1433
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__Database
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__Database
     value: "ppe"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__ConnectionTimeout
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__ConnectionTimeout
     value: 3000
     
-  - name: PTT_PPE_AUTHENTICATION_API_ConnectionSettings__DataConnection__Credentials
+  - name: PTT_PPE_EMAIL_API_ConnectionSettings__DataConnection__Credentials
     value: "ppe:8yGH@#4Ut2o0"
     
-  - name: PTT_PPE_AUTHENTICATION_API_KeyVaultSettings__Url
+  - name: PTT_PPE_EMAIL_API_KeyVaultSettings__Url
     value: "https://pttgc-poc-app.vault.azure.net"
     
-  - name: PTT_PPE_AUTHENTICATION_API_KeyVaultSettings__TenantId
+  - name: PTT_PPE_EMAIL_API_KeyVaultSettings__TenantId
     value: "cd01580f-b92e-494c-8b45-706ed5820613"
     
-  - name: PTT_PPE_AUTHENTICATION_API_KeyVaultSettings__ClientId
+  - name: PTT_PPE_EMAIL_API_KeyVaultSettings__ClientId
     value: "dbd21da9-b7aa-4bed-aba0-281dfa6b3946"
     
-  - name: PTT_PPE_AUTHENTICATION_API_KeyVaultSettings__ClientSecret
+  - name: PTT_PPE_EMAIL_API_KeyVaultSettings__ClientSecret
     value: "gHn8Q~LU_7sX1lMAsFAYfyNZhvFq3qmOm53M0b9Q"
     
-  - name: PTT_PPE_AUTHENTICATION_API_Authentication__Schema
+  - name: PTT_PPE_EMAIL_API_Authentication__Schema
     value: "dev.auth"
     
-  - name: PTT_PPE_AUTHENTICATION_API_Authentication__Collation
+  - name: PTT_PPE_EMAIL_API_Authentication__Collation
     value: "Thai_CI_AS"
     
-  - name: PTT_PPE_AUTHENTICATION_API_GrapgApiUserProfile
+  - name: PTT_PPE_EMAIL_API_GrapgApiUserProfile
     value: "/v1.0/me"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ApiClients__ApiGraph__BaseUri
+  - name: PTT_PPE_EMAIL_API_ApiClients__ApiGraph__BaseUri
     value: "https://graph.microsoft.com"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ApiClients__ApiPpe__BaseUri
+  - name: PTT_PPE_EMAIL_API_ApiClients__ApiPpe__BaseUri
     value: "http://localhost:5026"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ApiClients__ApiPpe__ApiKey
+  - name: PTT_PPE_EMAIL_API_ApiClients__ApiPpe__ApiKey
     value: "03655239-1ef0-4970-929c-1e0991cb39d2"
     
-  - name: PTT_PPE_AUTHENTICATION_API_ApiClients__ApiAuth__ApiKey
+  - name: PTT_PPE_EMAIL_API_ApiClients__ApiAuth__ApiKey
     value: "d9e410b8-9326-4956-8773-0c5115f09fc0"
 
-  - name: PTT_PPE_AUTHENTICATION_API_MinimumLevel__Override__PTTDigital
+  - name: PTT_PPE_EMAIL_API_MinimumLevel__Override__PTTDigital
     value: "Debug"
     
-  - name: PTT_PPE_AUTHENTICATION_API_TbSysPermissions
+  - name: PTT_PPE_EMAIL_API_TbSysPermissions
     value: "/api/v1/Ppe/TbSysPolicy/TbSysPermissions"
         
 containerPorts:
-  - 80
+  - 3000
 
 resources:
   requests:
@@ -128,10 +128,10 @@ service:
   type: ClusterIP
   annotation: {}
   ports:
-    - name: do66001-ppe-be-ppe-online-authentication-dev-svc
+    - name: do66001-ppe-be-ppe-online-email-dev-svc
       protocol: TCP
       externalPort: 80
-      internalPort: 80
+      internalPort: 3000
 
 ingress:
   enabled: true
@@ -142,16 +142,16 @@ ingress:
     # nginx.ingress.kubernetes.io/use-regex: "true"
   tls:
     - hosts:
-        - ppe-authen-dev.pttdigitalpoc.com
-      secretName: do66001-ppe-be-online-authen-dev-tls-secret
+        - ppe-email-dev.pttdigitalpoc.com
+      secretName: do66001-ppe-be-online-email-dev-tls-secret
   hosts:
-    - host: ppe-authen-dev.pttdigitalpoc.com
+    - host: ppe-email-dev.pttdigitalpoc.com
       paths:
         - path: /
           # - path: /path(/|$)(.*)
           pathType: Prefix
           backend:
             service:
-              name: do66001-ppe-be-ppe-online-authentication-dev
+              name: do66001-ppe-be-ppe-online-email-dev
               port:
                 number: 80
