@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Api.Provider;
+﻿using PTTDigital.Email.Common.Configuration.AppSetting;
+
+namespace PTTDigital.Email.Api.Provider;
 
 internal static partial class HttpClientFactoryExtension
 {

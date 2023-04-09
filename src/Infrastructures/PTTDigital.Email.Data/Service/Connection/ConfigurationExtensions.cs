@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using PTTDigital.Email.Common.KeyVault;
 
 namespace PTTDigital.Email.Data.Service.Connection;

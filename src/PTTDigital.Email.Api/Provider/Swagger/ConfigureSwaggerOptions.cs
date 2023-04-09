@@ -1,4 +1,9 @@
-﻿namespace PTTDigital.Email.Api.Provider.Swagger;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace PTTDigital.Email.Api.Provider.Swagger;
 
 /// <summary>
 /// Creating .NET Core API and Swagger UI with versioning

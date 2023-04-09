@@ -5,8 +5,6 @@ using PTTDigital.Email.Api.Provider;
 using PTTDigital.Email.Api.Provider.Dependency;
 using PTTDigital.Email.Api.Provider.Swagger;
 using PTTDigital.Email.Application;
-using PTTDigital.Email.Application.Authorization;
-using PTTDigital.Email.Application.Models.Token;
 using PTTDigital.Email.Common.Configuration.AppSetting;
 using PTTDigital.Email.Common.Configuration.AppSetting.API;
 using PTTDigital.Email.Common.KeyVault;

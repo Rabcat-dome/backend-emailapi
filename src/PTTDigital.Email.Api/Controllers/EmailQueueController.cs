@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PTTDigital.Email.Application.ViewModels.Requests;
+using PTTDigital.Email.Application.ViewModels.Responses;
 using PTTDigital.Email.Common.ApplicationUser.User;
 using PTTDigital.Email.Common.Exception;
-
-//using PTTDigital.Authentication.Application.ViewModels.Requests.AccountGroup;
-//using PTTDigital.Authentication.Application.ViewModels.Responses.AccountGroup;
+using PTTDigital.Email.Common.Helper.LogExtension;
 
 namespace PTTDigital.Email.Api.Controllers;
 
@@ -13,11 +13,13 @@ namespace PTTDigital.Email.Api.Controllers;
 [Route("api/v{version:apiVersion}/Email/[controller]")]
 public class EmailQueueController : ControllerBase
 {
-    private readonly IApplicationUser applicationUser;
+    private readonly IApplicationUser _applicationUser;
+    private readonly ILogger<EmailQueueController> _logger;
 
-    public EmailQueueController(IApplicationUser applicationUser)
+    public EmailQueueController(IApplicationUser applicationUser,ILogger<EmailQueueController> logger)
     {
-        this.applicationUser = applicationUser;
+        this._applicationUser = applicationUser;
+        _logger = logger;
     }
 
     /// <summary>
@@ -28,18 +30,20 @@ public class EmailQueueController : ControllerBase
     [ApiVersion("1.0")]
     [Authorize] //ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
     [Route("[action]")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponsePagination<AccGroupResponse>))]
+    [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(List<EmailQueueResponse>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-    public async Task<IActionResult> InsertEmailQueue([FromBody] Pagination<AccountRequest> pagination)
+    public async Task<IActionResult> InsertEmailQueue([FromBody] List<EmailQueueRequest> queues)
     {
         try
         {
-            //_logger.Log(LogLevel.Debug, LogEvents.Controller, authorization);
+            _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
 
-            var result = await accountService.QueryPagingAccountAccPolicyAccGroupAsync(pagination);
+            var userId = _applicationUser.UserId;
+            //var result = await accountService.QueryPagingAccountAccPolicyAccGroupAsync(pagination);
+            var result = new List<EmailQueueResponse>();
 
-            return StatusCode(StatusCodes.Status200OK, result);
+            return StatusCode(StatusCodes.Status201Created, result);
         }
         catch (AuthorizationException ex)
         {
@@ -59,20 +63,18 @@ public class EmailQueueController : ControllerBase
     [ApiVersion("1.0")]
     [Authorize] //ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
     [Route("[action]")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<CancelEmailQueueRequest>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-    public async Task<IActionResult> CancelEmailQueue([FromBody] AccountGroupRequest request)
+    public async Task<IActionResult> CancelEmailQueue([FromBody] List<CancelEmailQueueRequest> queues)
     {
         try
         {
-            //_logger.Log(LogLevel.Debug, LogEvents.Controller, authorization);
+            _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
 
-            request.CreatedBy = applicationUser.UserId;
+            //await accountService.AddAccountGroup(request);
 
-            await accountService.AddAccountGroup(request);
-
-            return StatusCode(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status202Accepted);
         }
         catch (AuthorizationException ex)
         {

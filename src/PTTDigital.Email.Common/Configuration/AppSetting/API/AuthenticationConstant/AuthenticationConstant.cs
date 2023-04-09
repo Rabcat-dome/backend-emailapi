@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Common.Configuration.AppSetting.API.AuthenticationConstant;
+﻿using System.Text.RegularExpressions;
+
+namespace PTTDigital.Email.Common.Configuration.AppSetting.API.AuthenticationConstant;
 
 public static class AuthenticationConstant
 {

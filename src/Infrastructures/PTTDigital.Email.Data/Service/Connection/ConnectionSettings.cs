@@ -4,11 +4,11 @@ namespace PTTDigital.Email.Data.Service.Connection;
 
 public abstract class ConnectionSettings : IConnectionSettings
 {
-    protected readonly IKeyVaultService keyVaultService;
+    protected readonly IKeyVaultService KeyVaultService;
 
     protected ConnectionSettings(IKeyVaultService keyVaultService)
     {
-        this.keyVaultService = keyVaultService;
+        this.KeyVaultService = keyVaultService;
     }
     public string ConnectionName { get; internal set; }
 

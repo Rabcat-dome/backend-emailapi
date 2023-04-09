@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Common.Exception;
+﻿using System.Runtime.CompilerServices;
+
+namespace PTTDigital.Email.Common.Exception;
 
 public class DuplicateException : System.Exception
 {

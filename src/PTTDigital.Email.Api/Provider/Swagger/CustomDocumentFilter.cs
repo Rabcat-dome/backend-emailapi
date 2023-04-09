@@ -1,4 +1,7 @@
-﻿namespace PTTDigital.Email.Api.Provider.Swagger;
+﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace PTTDigital.Email.Api.Provider.Swagger;
 
 internal class CustomDocumentFilter : IDocumentFilter
 {
