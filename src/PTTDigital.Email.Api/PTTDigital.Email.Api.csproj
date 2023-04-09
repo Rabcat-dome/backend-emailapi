@@ -31,9 +31,5 @@
     <ProjectReference Include="..\PTTDigital.Email.Application\PTTDigital.Email.Application.csproj" />
     <ProjectReference Include="..\PTTDigital.Email.Common\PTTDigital.Email.Common.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 
 </Project>
