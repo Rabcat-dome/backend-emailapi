@@ -1,0 +1,11 @@
+version: "3"
+services:
+  aspnet-backend:
+    build:
+      context: ../../.
+      dockerfile: /CICD/DOCKER/Dockerfile
+    ports:
+      - "3000:3000"
+    #entrypoint: ["/app/wait-for-it.sh", "postgres:5432", "--", "dotnet", "migration/Ptt.AppInventory.Data.Migration.dll"]
+    container_name: be-email
+    stdin_open: true

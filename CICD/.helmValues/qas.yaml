@@ -1,0 +1,79 @@
+## Edit
+## organization_name => replace all with your github organization name with lowercase
+## repository_name => replace all with your github repository name with lowercase
+## hostname => replace all with your application hostname with lowercase
+## path => replace all with your application path with lowercase
+
+replicaCount: 1
+
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: Always
+
+imagePullSecrets:
+  - acr-secret
+
+nameOverride: do66001-ppe-be-ppe-online-authentication-qas
+fullnameOverride: do66001-ppe-be-ppe-online-authentication-qas
+
+env:
+  - name: NODE_ENV
+    value: qas
+
+containerPorts:
+  - 80
+
+resources:
+  requests:
+    cpu: 500m
+  limits:
+    cpu: 500m
+
+# volumeMounts:
+#   - mountPath: "/data/"
+#     name: file-volume-claim
+
+# volumes:
+#   - name: file-volume-claim
+#     persistentVolumeClaim:
+#       claimName: claim-file-pvc
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+service:
+  enabled: true
+  type: ClusterIP
+  annotation: {}
+  ports:
+    - name: do66001-ppe-be-ppe-online-authentication-qas-svc
+      protocol: TCP
+      externalPort: 80
+      internalPort: 80
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # nginx.ingress.kubernetes.io/use-regex: "true"
+  tls:
+    - hosts:
+        - ppe-authen-qas.pttdigitalpoc.com
+      secretName: tls-secret
+  hosts:
+    - host: ppe-authen-qas.pttdigitalpoc.com
+      paths:
+        - path: /
+          # - path: /path(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: do66001-ppe-be-ppe-online-authentication-qas
+              port:
+                number: 80
