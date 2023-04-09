@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using PTTDigital.Email.Common.ApplicationUser;
 using PTTDigital.Email.Common.Configuration.AppSetting.API;
+using ServiceStack.DataAnnotations;
 
 namespace PTTDigital.Email.Application.Services.Token;
 

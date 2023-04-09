@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Common.ApplicationUser.TaskStore;
+﻿using PTTDigital.Email.Common.ApplicationUser.User;
+
+namespace PTTDigital.Email.Common.ApplicationUser.TaskStore;
 
 public record TaskStoreValue
 {

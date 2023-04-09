@@ -14,6 +14,7 @@ internal static partial class LoggerExtension
         {
             logging.ClearProviders();
             logging.AddSerilog();
+            logging.AddConsole();
         }).UseSerilog((context, config) =>
         {
             config.ReadFrom.Configuration(context.Configuration);

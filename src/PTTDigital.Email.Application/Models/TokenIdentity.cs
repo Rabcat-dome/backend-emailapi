@@ -1,4 +1,7 @@
-﻿namespace PTTDigital.Email.Application.Models;
+﻿using PTTDigital.Email.Application.Models.Token;
+using PTTDigital.Email.Common.ApplicationUser.User;
+
+namespace PTTDigital.Email.Application.Models;
 
 public class TokenIdentity
 {

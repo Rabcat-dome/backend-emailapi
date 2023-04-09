@@ -1,4 +1,8 @@
-﻿namespace PTTDigital.Email.Application.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PTTDigital.Email.Application.Utility;
+
+namespace PTTDigital.Email.Application.Models;
 
 /// <remarks/>
 public class AuthorizationModel

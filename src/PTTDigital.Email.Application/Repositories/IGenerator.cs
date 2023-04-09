@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Authentication.Data.Repository;
+﻿namespace PTTDigital.Email.Application.Repositories;
 
 public interface IGenerator
 {

@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Authentication.Common;
+﻿namespace PTTDigital.Email.Common;
 
 public enum Statuses
 {

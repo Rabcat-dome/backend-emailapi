@@ -20,4 +20,9 @@
     <ProjectReference Include="..\..\PTTDigital.Email.Common\PTTDigital.Email.Common.csproj" />
     <ProjectReference Include="..\PTTDigital.Email.Data\PTTDigital.Email.Data.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Context\" />
+    <Folder Include="Migrations\email\" />
+  </ItemGroup>
 </Project>

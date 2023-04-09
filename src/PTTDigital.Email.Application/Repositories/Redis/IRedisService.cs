@@ -1,4 +1,4 @@
-﻿using PTTDigital.Authentication.Common;
+﻿using PTTDigital.Email.Common;
 using PTTDigital.Email.Common.Redis;
 
 namespace PTTDigital.Email.Application.Repositories.Redis;

@@ -1,4 +1,6 @@
-﻿namespace PTTDigital.Email.Common.Exception;
+﻿using Newtonsoft.Json;
+
+namespace PTTDigital.Email.Common.Exception;
 
 public class ErrorModel
 {

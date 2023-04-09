@@ -1,4 +1,8 @@
-﻿namespace PTTDigital.Email.Common.ApplicationUser.User;
+﻿using System.ComponentModel;
+using System.Reflection;
+using System.Security.Claims;
+
+namespace PTTDigital.Email.Common.ApplicationUser.User;
 
 public class ClaimPayload : IClaimPayload
 {

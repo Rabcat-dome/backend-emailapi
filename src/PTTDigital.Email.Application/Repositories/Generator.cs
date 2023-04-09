@@ -1,6 +1,4 @@
-﻿using PTTDigital.Authentication.Data.Repository;
-
-namespace PTTDigital.Email.Application.Repositories;
+﻿namespace PTTDigital.Email.Application.Repositories;
 
 public class Generator : IGenerator
 {

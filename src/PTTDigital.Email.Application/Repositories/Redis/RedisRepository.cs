@@ -1,4 +1,8 @@
-﻿namespace PTTDigital.Email.Application.Repositories.Redis;
+﻿using PTTDigital.Email.Common.Helper;
+using PTTDigital.Email.Common.Redis;
+using ServiceStack.Redis;
+
+namespace PTTDigital.Email.Application.Repositories.Redis;
 
 public class RedisRepository : IRedisRepositoty
 {
