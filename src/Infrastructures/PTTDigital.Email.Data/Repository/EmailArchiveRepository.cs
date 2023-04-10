@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using PTTDigital.Authentication.Data.Repository;
 using PTTDigital.Email.Application.Repositories;
+using PTTDigital.Email.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PTTDigital.Email.Data.Repository
 {
-    internal class EmailArchiveRepository<TDbContext> : RepositoryBase<Group, TDbContext>, IEmailArchiveRepository where TDbContext : DbContext
+    internal class EmailArchiveRepository<TDbContext> : RepositoryBase<EmailArchive, TDbContext>, IEmailArchiveRepository where TDbContext : DbContext
     {
         internal EmailArchiveRepository(TDbContext db, IGenerator generator, IMemoryCache cache) : base(db, generator, cache)
         {

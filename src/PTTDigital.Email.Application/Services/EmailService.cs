@@ -14,12 +14,12 @@ namespace PTTDigital.Email.Application.Services
     public class EmailService
     {
         private readonly IGenerator _generator;
-        private readonly Data.Context.EmailContextBase _emailDataContext;
 
-        public EmailService(IGenerator generator, Data.Context.EmailContextBase emailDataContext)
+
+        public EmailService(IGenerator generator)
         {
             this._generator = generator;
-            _emailDataContext = emailDataContext;
+
         }
 
         public async Task<List<EmailQueueResponse>> InsertQueue(List<EmailQueueRequest> queues)
@@ -28,7 +28,7 @@ namespace PTTDigital.Email.Application.Services
             var response = new List<EmailQueueResponse>();
 
 
-
+            return new List<EmailQueueResponse>();
         }
 
         public async Task RemoveQueue(List<string> QueueIds)

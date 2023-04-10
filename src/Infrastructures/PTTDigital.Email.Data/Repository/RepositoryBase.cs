@@ -1,4 +1,13 @@
-﻿namespace PTTDigital.Authentication.Data.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Caching.Memory;
+using PTTDigital.Authentication.Data.Models;
+using PTTDigital.Email.Application.Repositories;
+using PTTDigital.Email.Data.Paging;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
+
+namespace PTTDigital.Email.Data.Repository;
 
 public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
     where TEntity : class
@@ -96,14 +105,14 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
             var dateTime = DateTime.Now;
             var tmpEntity = (IEntity)entity;
             var tmpAudit = (IAudit)entity;
-            tmpEntity.Id = generator.GenerateUlid();
-            tmpEntity.IsActive = true;
-            tmpEntity.IsDeleted = false;
-            tmpAudit.CreatedDate = dateTime;
-            tmpAudit.UpdatedDate = dateTime;
-            tmpAudit.UpdatedBy = null;
-            tmpAudit.DeletedDate = null;
-            tmpAudit.DeletedBy = null;
+            //tmpEntity.Id = generator.GenerateUlid();
+            //tmpEntity.IsActive = true;
+            //tmpEntity.IsDeleted = false;
+            //tmpAudit.CreatedDate = dateTime;
+            //tmpAudit.UpdatedDate = dateTime;
+            //tmpAudit.UpdatedBy = null;
+            //tmpAudit.DeletedDate = null;
+            //tmpAudit.DeletedBy = null;
         }
 
         return dataSet.Add(entity);
@@ -115,13 +124,13 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         {
             var tmpEntity = (IEntity)entity;
             var tmpAudit = (IAudit)entity;
-            tmpEntity.Id = generator.GenerateUlid();
-            tmpEntity.IsDeleted = false;
-            tmpAudit.CreatedDate = DateTime.Now;
-            tmpAudit.UpdatedDate = null;
-            tmpAudit.UpdatedBy = null;
-            tmpAudit.DeletedDate = null;
-            tmpAudit.DeletedBy = null;
+            //tmpEntity.Id = generator.GenerateUlid();
+            //tmpEntity.IsDeleted = false;
+            //tmpAudit.CreatedDate = DateTime.Now;
+            //tmpAudit.UpdatedDate = null;
+            //tmpAudit.UpdatedBy = null;
+            //tmpAudit.DeletedDate = null;
+            //tmpAudit.DeletedBy = null;
         }
 
         return dataSet.Add(entity);
@@ -134,7 +143,7 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         if (isIAudit && isIEntity)
         {
             var tmpAudit = (IAudit)entity;
-            tmpAudit.UpdatedDate = DateTime.Now;
+            //tmpAudit.UpdatedDate = DateTime.Now;
         }
 
         return dataSet.Update(entity);
@@ -146,8 +155,8 @@ public abstract class RepositoryBase<TEntity, TDbContext> : IRepository<TEntity>
         {
             var tmpEntity = (IEntity)entity;
             var tmpAudit = (IAudit)entity;
-            tmpEntity.IsDeleted = true;
-            tmpAudit.DeletedDate = DateTime.Now;
+            //tmpEntity.IsDeleted = true;
+            //tmpAudit.DeletedDate = DateTime.Now;
         }
 
         return dataSet.Update(entity);
