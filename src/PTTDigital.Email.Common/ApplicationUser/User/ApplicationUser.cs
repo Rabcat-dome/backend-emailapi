@@ -98,7 +98,7 @@ internal static class HttpContextExtension
             return default;
         }
 
-        if (!httpContext.Request.Headers.TryGetValue(AuthenticationConstant.HttpHeaderSessionToken, out StringValues result))
+        if (!httpContext.Request.Headers.TryGetValue(EmailConstant.HttpHeaderSessionToken, out StringValues result))
         {
             return default;
         }
@@ -113,7 +113,7 @@ internal static class HttpContextExtension
             return default;
         }
 
-        var hostname = GetHeaderValue(httpContext, AuthenticationConstant.HttpHeaderOriginHostname);
+        var hostname = GetHeaderValue(httpContext, EmailConstant.HttpHeaderOriginHostname);
 
         if (!string.IsNullOrEmpty(hostname))
         {
@@ -124,7 +124,7 @@ internal static class HttpContextExtension
         var ipAddress = httpContext.Connection.RemoteIpAddress;
 
         // The current process, processes running on the local computer.
-        var pid = GetHeaderValue(httpContext, AuthenticationConstant.HttpHeaderProcessIDHostname);
+        var pid = GetHeaderValue(httpContext, EmailConstant.HttpHeaderProcessIDHostname);
         var appName = httpContext.GetAppName();
         var loginName = httpContext.GetUserName();
 
@@ -167,7 +167,7 @@ internal static class HttpContextExtension
             return default!;
         }
 
-        var values = GetHeaderValue(httpContext, AuthenticationConstant.HttpHeaderForwardedFor);
+        var values = GetHeaderValue(httpContext, EmailConstant.HttpHeaderForwardedFor);
         if (!string.IsNullOrEmpty(values) && IPAddress.TryParse(values, out var ipAddress))
         {
             return new IPEndPoint(ipAddress, 0);

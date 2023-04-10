@@ -8,6 +8,14 @@ using PTTDigital.Email.Application;
 using PTTDigital.Email.Common.Configuration.AppSetting;
 using PTTDigital.Email.Common.Configuration.AppSetting.API;
 using PTTDigital.Email.Common.KeyVault;
+using PTTDigital.Email.Data.SqlServer.Context;
+using PTTDigital.Email.Data.Service.Connection;
+using PTTDigital.Authentication.Api.HealthCheck;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
+using System.IO.Compression;
+using Microsoft.AspNetCore.ResponseCompression;
+using PTTDigital.Email.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +34,12 @@ builder.Services.AddSingleton<IAppSetting>(service => service.GetService<IOption
 builder.Services.AddSingleton<IAuthorizationConfig>(service => service.GetService<IOptions<AppSetting>>()?.Value.Authorization!);
 //builder.Services.AddScoped<ISessionToken>(service => service.GetService<IApiAuthorizeServer>()!);
 //builder.Services.AddScoped<IUserPermissionService, MockUserPermissionService>();  //ต้องใช้หรือไม่
+builder.Services.AddHttpClientFactory();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true).AddNewtonsoftJson(options =>
 {
@@ -42,6 +56,31 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.AddJwtTokenConfiguration(builder.Configuration);
 builder.AddDependencyInjection();
 builder.AddDatabaseConfiguration(builder.Configuration);
+//builder.Services.AddAuthenticationService(builder.Configuration);
+//builder.Services.AddRedisClientsManager(builder.Configuration);
+builder.Services.AddEntityConfig<EmailDataContext>(builder.Configuration, "Email");
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMemoryCache();
+builder.Services.AddCors();
+
+builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"/entity/protection/"));
+builder.Services.AddCustomHealthChecks(builder.Configuration);
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.SmallestSize;
+});
+
 builder.AddLogger();
 
 var app = builder.Build();
@@ -52,10 +91,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerVersioning();
 }
 
+app.UseMiddleware<TimestampMiddleware>();
+app.UseMiddleware<DecompressionMiddleware>();
+app.UseMiddleware<CustomAuthorizeMiddleware>();
+app.UseMiddleware<ApiRouterMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCustomHealthCheck();
+app.UseResponseCompression();
 app.MapControllers();
 
 app.Run();

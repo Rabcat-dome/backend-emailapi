@@ -25,6 +25,7 @@ public class AppSetting : IAppSetting
     public ClientConfiguration? ClientConfigs { get; set; }
 
     public string? SymmetricKey { get; set; }
+    public string? OAuthSession { get; set; }
 
     public string? GrapgApiUserProfile { get; set; }
 
@@ -33,6 +34,9 @@ public class AppSetting : IAppSetting
     public string? AppName { get; set; }
 
     public bool UseInMemory { get; set; }
+    public string[]? AllowOrigins { get; set; }
+
+    public string? UserInGroup { get; set; }
 
     public string? TbSysPermissions { get; set; }
 

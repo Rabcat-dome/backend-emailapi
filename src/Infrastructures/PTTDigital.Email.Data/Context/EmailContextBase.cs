@@ -22,7 +22,7 @@ public class EmailContextBase<TDbContext> : DbContextBase<TDbContext>
     //    Console.ForegroundColor = ConsoleColor.Red;
     //}
 
-    public DbSet<Message> Messages { get; set; }
-    public DbSet<EmailQueue> EmailQueues { get; set; }
-    public DbSet<EmailArchive> EmailArchives { get; set; }
+    public DbSet<Message>? Messages { get; set; }
+    public DbSet<EmailQueue>? EmailQueues { get; set; }
+    public DbSet<EmailArchive>? EmailArchives { get; set; }
 }

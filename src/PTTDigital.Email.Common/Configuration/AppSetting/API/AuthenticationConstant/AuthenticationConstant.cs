@@ -2,7 +2,7 @@
 
 namespace PTTDigital.Email.Common.Configuration.AppSetting.API.AuthenticationConstant;
 
-public static class AuthenticationConstant
+public static class EmailConstant
 {
     public const string AccessToken = "as:accessToken";
     public const string InvalidClientError = "invalid_client";
