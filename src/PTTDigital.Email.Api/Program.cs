@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using Microsoft.AspNetCore.ResponseCompression;
 using PTTDigital.Email.Api.Middleware;
+using Hangfire;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +85,12 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 
 builder.AddLogger();
 
+//hangfile
+builder.Services.AddHangfire(config =>
+    //หาน้องมาปรับ HardCode ตรงนี้ให้หน่อยครับ
+    config.UseSqlServerStorage("Server=pttgc-poc.database.windows.net,1433;Database=ppe;User Id=ppe;Password=8yGH@#4Ut2o0;"));
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -90,6 +98,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerVersioning();
 }
+
+//hangfile
+var options = new DashboardOptions()
+{
+    Authorization = new[] { new MyAuthorizationFilter() }
+};
+app.UseHangfireDashboard("/hangfire", options);
+//
 
 app.UseMiddleware<TimestampMiddleware>();
 app.UseMiddleware<DecompressionMiddleware>();
