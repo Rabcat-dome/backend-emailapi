@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PTTDigital.Email.Data.SqlServer.Context;
 
@@ -11,9 +12,10 @@ using PTTDigital.Email.Data.SqlServer.Context;
 namespace PTTDigital.Email.Data.SqlServer.Migrations.email
 {
     [DbContext(typeof(EmailDataContext))]
-    partial class EmailDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230410181155_FixUserIdFromIntToString")]
+    partial class FixUserIdFromIntToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

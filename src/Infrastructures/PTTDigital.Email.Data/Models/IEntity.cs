@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Authentication.Data.Models;
+﻿namespace PTTDigital.Email.Data.Models;
 
 public interface IEntity
 {

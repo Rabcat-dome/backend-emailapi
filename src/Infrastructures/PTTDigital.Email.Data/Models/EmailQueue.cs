@@ -28,8 +28,8 @@ namespace PTTDigital.Email.Data.Models
         public bool IsHtmlFormat { get; set; } = true;
         public int RetryCount { get; set; } = 0;  //ใช้ในเงื่อนไขกวาดส่งกรณีที่มี Failed แต่ไม่เกี่ยวกับเงื่อนไข Transaction เคส 15 วันแจ้งเตือนเพราะเป็นเคสยิง Schedule อีกแบบในการ create Job
         public QueueStatus Status { get; set; } = QueueStatus.New;
-
-        public int? RefAccPolicyId { get; set; } //เผื่อเคสที่เป็น bypass จะ allowNull
+        [MaxLength(50)]
+        public string? RefAccPolicyId { get; set; } //เผื่อเคสที่เป็น bypass จะ allowNull
         public bool IsTest { get; set; } = false;
 
         [ForeignKey(nameof(Message))]

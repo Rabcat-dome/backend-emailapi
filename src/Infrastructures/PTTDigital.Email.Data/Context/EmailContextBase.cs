@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using PTTDigital.Authentication.Data.Interfaces;
 using PTTDigital.Email.Data.Interfaces;
 using PTTDigital.Email.Data.Models;
 

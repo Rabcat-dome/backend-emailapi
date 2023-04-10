@@ -34,6 +34,7 @@ public class AppSetting : IAppSetting
     public string? AppName { get; set; }
 
     public bool UseInMemory { get; set; }
+    public bool IsTest { get; set; }
     public string[]? AllowOrigins { get; set; }
 
     public string? UserInGroup { get; set; }

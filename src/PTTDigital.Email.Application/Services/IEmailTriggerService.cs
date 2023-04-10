@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PTTDigital.Email.Application.Services
 {
-    public class SmtpService
+    public interface IEmailTriggerService
     {
     }
 }

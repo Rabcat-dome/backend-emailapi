@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Authentication.Data.Interfaces;
+﻿namespace PTTDigital.Email.Data.Interfaces;
 
 public interface IEntityInfo
 {

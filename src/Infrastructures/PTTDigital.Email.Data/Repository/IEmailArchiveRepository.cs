@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PTTDigital.Email.Data.Repository
 {
-    internal interface IEmailArchiveRepository : IRepository<EmailArchive>
+    public interface IEmailArchiveRepository : IRepository<EmailArchive>
     {
 
     }

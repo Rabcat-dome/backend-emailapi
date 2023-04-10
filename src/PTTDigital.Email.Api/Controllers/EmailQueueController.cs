@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PTTDigital.Email.Application.ViewModels.Requests;
 using PTTDigital.Email.Application.ViewModels.Responses;
 using PTTDigital.Email.Common.ApplicationUser.User;
+using PTTDigital.Email.Common.Configuration.AppSetting;
 using PTTDigital.Email.Common.Exception;
 using PTTDigital.Email.Common.Helper.LogExtension;
+using PTTDigital.Email.Data.Models;
+using PTTDigital.Email.Data.Service;
 
 namespace PTTDigital.Email.Api.Controllers;
 
@@ -15,11 +19,17 @@ public class EmailQueueController : ControllerBase
 {
     private readonly IApplicationUser _applicationUser;
     private readonly ILogger<EmailQueueController> _logger;
+    private readonly IEmailDataService _emailDataService;
+    private readonly IGenerator _generator;
+    private readonly IAppSetting _appSetting;
 
-    public EmailQueueController(IApplicationUser applicationUser,ILogger<EmailQueueController> logger)
+    public EmailQueueController(IApplicationUser applicationUser, ILogger<EmailQueueController> logger, IEmailDataService emailDataService, IGenerator generator, IAppSetting appSetting)
     {
         this._applicationUser = applicationUser;
         _logger = logger;
+        _emailDataService = emailDataService;
+        _generator = generator;
+        _appSetting = appSetting;
     }
 
     /// <summary>
@@ -35,13 +45,47 @@ public class EmailQueueController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
     public async Task<IActionResult> InsertEmailQueue([FromBody] List<EmailQueueRequest> queues)
     {
+        //อยากจะหาน้องมาช่วยทำ Extract Service ให้สวย ๆ ที่ EmailService
         try
         {
             _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
 
             var userId = _applicationUser.UserId;
-            //var result = await accountService.QueryPagingAccountAccPolicyAccGroupAsync(pagination);
             var result = new List<EmailQueueResponse>();
+            foreach (var queue in queues)
+            {
+                var queueId = _generator.GenerateUlid();
+                var messageId = _generator.GenerateUlid();
+
+                var queueEmail = new EmailQueue()
+                {
+                    QueueId = queueId,
+                    EmailFrom = queue.EmailFrom,
+                    EmailTo = queue.EmailTo,
+                    EmailCc = queue.EmailCc ?? string.Empty,
+                    RefAccPolicyId = userId,
+                    IsTest = _appSetting.IsTest,
+                };
+                var message = new Message()
+                {
+                    MessageId = messageId,
+                    EmailSubject = queue.Subject,
+                    EmailBody = queue.Body,
+                };
+                _emailDataService.EmailQueueRepository.Add(queueEmail);
+                _emailDataService.MessageRepository.Add(message);
+
+                result.Add(new EmailQueueResponse()
+                {
+                    QueueId = queueId,
+                    Subject = queue.Subject,
+                    EmailTo = queue.EmailTo
+                });
+            }
+
+#pragma warning disable CS4014
+            Task.Run(async () => await _emailDataService.SaveChangeAsync()).ConfigureAwait(false);
+#pragma warning restore CS4014
 
             return StatusCode(StatusCodes.Status201Created, result);
         }
@@ -68,12 +112,29 @@ public class EmailQueueController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
     public async Task<IActionResult> CancelEmailQueue([FromBody] List<CancelEmailQueueRequest> queues)
     {
+        //อยากจะหาน้องมาช่วยทำ Extract Service ให้สวย ๆ ที่ EmailService
         try
         {
             _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
+            
+#pragma warning disable CS4014
+            Task.Run(async () =>
+            {
+                //_emailDataService.EmailQueueRepository.Query(x=>queue.Contain(x.QueueId)) => แบบนี้ Performance น่าจะไม่ดี
+                var newMessages = _emailDataService.EmailQueueRepository.Query(x => x.Status == QueueStatus.New).ToList();
+                foreach (var message in newMessages)
+                {
+                    if (queues.Any(x => x.QueueId == message.QueueId))
+                    {
+                        message.Status = QueueStatus.Canceled;
+                        _emailDataService.EmailQueueRepository.Update(message);
+                    }
+                }
 
-            //await accountService.AddAccountGroup(request);
-
+                await _emailDataService.SaveChangeAsync().ConfigureAwait(false);
+            });
+#pragma warning restore CS4014
+            
             return StatusCode(StatusCodes.Status202Accepted);
         }
         catch (AuthorizationException ex)

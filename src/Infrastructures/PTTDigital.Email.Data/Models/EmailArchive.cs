@@ -29,8 +29,8 @@ namespace PTTDigital.Email.Data.Models
         public bool IsHtmlFormat { get; set; }
         public int RetryCount { get; set; }
         public QueueStatus Status { get; set; }
-
-        public int? RefAccPolicyId { get; set; }
+        [MaxLength(50)]
+        public string? RefAccPolicyId { get; set; }
         public bool IsTest { get; set; }
 
         [ForeignKey(nameof(Message))]

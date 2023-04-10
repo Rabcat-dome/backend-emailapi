@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using PTTDigital.Email.Application.Repositories;
 using PTTDigital.Email.Data.Models;
+using PTTDigital.Email.Data.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;

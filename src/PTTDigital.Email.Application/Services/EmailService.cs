@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PTTDigital.Email.Data.Service;
 
 namespace PTTDigital.Email.Application.Services
 {
-    public class EmailService
+    public class EmailService:IEmailService
     {
         private readonly IGenerator _generator;
 

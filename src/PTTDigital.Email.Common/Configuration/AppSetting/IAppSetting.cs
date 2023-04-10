@@ -10,7 +10,7 @@ public interface IAppSetting
     ClientConfiguration ClientConfigs { get; }
 
     string? SymmetricKey { get; }
-    public string? OAuthSession { get; set; }
+    string? OAuthSession { get; set; }
 
     string? GrapgApiUserProfile { get; }
 
@@ -19,6 +19,7 @@ public interface IAppSetting
     string? AppName { get; }
 
     bool UseInMemory { get; }
+    bool IsTest { get; set; }
     string[]? AllowOrigins { get; }
     string? UserInGroup { get; }
 

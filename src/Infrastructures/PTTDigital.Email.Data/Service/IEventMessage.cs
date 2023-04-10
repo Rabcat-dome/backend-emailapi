@@ -1,6 +1,6 @@
-﻿namespace PTTDigital.Email.Data.Service;
+﻿namespace PTTDigital.Email.Data.Repository;
 
 public interface IEventMessage
 {
-    string? CorrelationId { get; }
+    string? CorrelationId { get; set; }
 }

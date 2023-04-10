@@ -24,6 +24,7 @@ public class EmailTriggerController : ControllerBase
 
     /// <summary>
     /// ใช้เพื่อกวาดเมลล์ทุก ๆ x นาทีแล้วส่งไปที่ SMTP  กรณีที่มี Error ใด ๆ จะส่ง PK ของ Queue Id ไปที่ AdminEmail เพื่อแจ้งให้ทราบ (ส่งเข้า AdminMail ทันที)
+    /// จะมีการ Replace _appSetting IsTest ที่ Record ด้วยเพื่อเช็คว่ามีการส่งแบบ Test
     /// </summary>
     [HttpPatch]
     [ApiVersion("1.0")]

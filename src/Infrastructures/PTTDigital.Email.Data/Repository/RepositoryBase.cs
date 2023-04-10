@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Caching.Memory;
-using PTTDigital.Authentication.Data.Models;
-using PTTDigital.Email.Application.Repositories;
 using PTTDigital.Email.Data.Paging;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
+using PTTDigital.Email.Data.Models;
+using PTTDigital.Email.Data.Service;
 
 namespace PTTDigital.Email.Data.Repository;
 

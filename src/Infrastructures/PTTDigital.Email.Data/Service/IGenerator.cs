@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Email.Application.Repositories;
+﻿namespace PTTDigital.Email.Data.Service;
 
 public interface IGenerator
 {

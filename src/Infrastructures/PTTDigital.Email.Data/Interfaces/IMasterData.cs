@@ -1,3 +1,3 @@
-﻿namespace PTTDigital.Authentication.Domain.Interfaces;
+﻿namespace PTTDigital.Email.Data.Interfaces;
 
 public interface IMasterData { }

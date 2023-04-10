@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PTTDigital.Authentication.Data.Interfaces;
 using PTTDigital.Email.Data.Interfaces;
 
 namespace PTTDigital.Email.Data.Service.Connection;
