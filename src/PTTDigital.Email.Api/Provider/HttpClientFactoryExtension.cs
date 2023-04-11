@@ -1,4 +1,6 @@
-﻿using PTTDigital.Email.Common.Configuration.AppSetting;
+﻿using PTTDigital.Email.Application.Api.Client.HttpDelegating;
+using PTTDigital.Email.Common.ApplicationUser.User;
+using PTTDigital.Email.Common.Configuration.AppSetting;
 
 namespace PTTDigital.Email.Api.Provider;
 
@@ -17,6 +19,7 @@ internal static partial class HttpClientFactoryExtension
     internal static IServiceCollection AddHttpClientFactory(this IServiceCollection services,
         ApiClientType clientType = ApiClientType.All)
     {
+        services.AddScoped<IApplicationUser, ApplicationUser>();
         services.AddScoped<IApiConfigurationFactory, ApiConfigurationFactory>();
 
         var apiClientTypes = GetFlags(clientType).Except(new Enum[] { ApiClientType.None, ApiClientType.All })
@@ -36,11 +39,12 @@ internal static partial class HttpClientFactoryExtension
                 }
 
                 httpClient.BaseAddress = new Uri(apiConfig.BaseUri);
-            });
+            }).AddHttpMessageHandler<OperationHandler>(); ;
                 //.AddHttpMessageHandler<OperationHandler>();
             //.AddHttpMessageHandler<LoggingDelegatingHandler>();
         });
 
+        services.AddScoped<OperationHandler>();
         //services.AddScoped<OperationHandler>();
         //services.AddScoped<LoggingDelegatingHandler>();
 

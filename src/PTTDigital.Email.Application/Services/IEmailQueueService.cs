@@ -7,7 +7,7 @@ namespace PTTDigital.Email.Application.Services
     {
         List<EmailQueueResponse> InsertQueue(List<EmailQueueRequest> queues);
         Task CancelQueue(List<CancelEmailQueueRequest> queueIds);
-        Task TriggerMail();
-        Task ArchiveMail();
+        void TriggerMail();
+        void ArchiveMail();
     }
 }

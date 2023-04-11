@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using PTTDigital.Email.Application.Services;
 using PTTDigital.Email.Common.EncryptDecrypt.Cryptography;
 using PTTDigital.Email.Data.Service;
+using PTTDigital.Email.Data.SqlServer.Context;
 
 namespace PTTDigital.Email.Application;
 
@@ -16,6 +18,14 @@ public static class DependencyInjectionExtension
         builder.Services.AddScoped<IEmailTriggerService, EmailTriggerService>();
         builder.Services.AddScoped<IEncryptDecryptHelper, EncryptDecryptHelper>();
 
+        builder.Services.AddScoped<IEmailDataService>(service =>
+        {
+            var context = service.GetService<EmailDataContext>()!;
+            var generator = service.GetService<IGenerator>()!;
+            var memoryCache = service.GetService<IMemoryCache>()!;
+
+            return new EmailDataService<EmailDataContext>(context, generator, memoryCache);
+        });
         #endregion
     }
 }

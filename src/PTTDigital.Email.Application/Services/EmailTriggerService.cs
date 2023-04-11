@@ -61,7 +61,7 @@ public class EmailTriggerService : IEmailTriggerService
         return !string.IsNullOrWhiteSpace(emailAddress) && Regex.IsMatch(emailAddress, matchEmailPattern);
     }
 
-    public async Task SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment>? attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses)
+    public void SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment>? attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses)
     {
         ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
@@ -89,6 +89,6 @@ public class EmailTriggerService : IEmailTriggerService
                 mailMessage.Attachments.Add(attachment);
             }
 
-        await smtpClient.SendMailAsync(mailMessage, CancellationToken.None);
+        smtpClient.Send(mailMessage);
     }
 }
