@@ -20,6 +20,9 @@ public interface IAppSetting
 
     bool UseInMemory { get; }
     bool IsTest { get; set; }
+    string? AdminEmail { get; set; }
+    int SMTPPort { get; set; }
+    string? SMTPServer { get; set; }
     string[]? AllowOrigins { get; }
     string? UserInGroup { get; }
 

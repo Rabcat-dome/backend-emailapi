@@ -35,6 +35,9 @@ public class AppSetting : IAppSetting
 
     public bool UseInMemory { get; set; }
     public bool IsTest { get; set; }
+    public string? AdminEmail { get; set; }
+    public int SMTPPort { get; set; } = 25;
+    public string? SMTPServer { get; set; }
     public string[]? AllowOrigins { get; set; }
 
     public string? UserInGroup { get; set; }

@@ -15,7 +15,7 @@ public static class DependencyInjectionExtension
         #region DI service ==> repository
         builder.Services.AddScoped<IGenerator, Generator>();
         //builder.Services.AddScoped<IAccountService, AccountService>();
-        builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<IEmailQueueService, EmailService>();
         builder.Services.AddScoped<IEmailTriggerService, EmailTriggerService>();
         builder.Services.AddScoped<IEncryptDecryptHelper, EncryptDecryptHelper>();
 

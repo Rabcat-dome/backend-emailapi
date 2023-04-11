@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PTTDigital.Email.Application.Services;
 using PTTDigital.Email.Application.ViewModels.Requests;
 using PTTDigital.Email.Application.ViewModels.Responses;
 using PTTDigital.Email.Common.ApplicationUser.User;
@@ -20,14 +21,16 @@ public class EmailQueueController : ControllerBase
     private readonly IApplicationUser _applicationUser;
     private readonly ILogger<EmailQueueController> _logger;
     private readonly IEmailDataService _emailDataService;
+    private readonly IEmailQueueService _emailQueueService;
     private readonly IGenerator _generator;
     private readonly IAppSetting _appSetting;
 
-    public EmailQueueController(IApplicationUser applicationUser, ILogger<EmailQueueController> logger, IEmailDataService emailDataService, IGenerator generator, IAppSetting appSetting)
+    public EmailQueueController(IApplicationUser applicationUser, ILogger<EmailQueueController> logger, IEmailDataService emailDataService,IEmailQueueService emailQueueService, IGenerator generator, IAppSetting appSetting)
     {
         this._applicationUser = applicationUser;
         _logger = logger;
         _emailDataService = emailDataService;
+        _emailQueueService = emailQueueService;
         _generator = generator;
         _appSetting = appSetting;
     }
@@ -35,6 +38,7 @@ public class EmailQueueController : ControllerBase
     /// <summary>
     /// 1.ดำเนินการเพิ่มรายการที่จะส่งเมลล์  โดยรองรับเป็น List ของ Queue แต่ถ้าต้นทางจะส่งมาแค่รายการเมลล์เดียวก็จะต้องส่ง
     /// 2.จะ reponse 202 กลับออกไปเป็น List ของ Id Map กับ Subject/EmailTo เพื่อเอาไปให้บริหารต่อ เผื่อจะยิง Cancel กลับมา => จะทำการ gen Ulid ที่ใช้ในการ Map ตัวแปรแล้ว return ออกไปก่อนโดยไม่แต่ Database
+    /// 3.Format ที่จะส่งเมลล์เข้ามาจะต้องส่งด้วย  Mail1|Mail2|Mail3  คั่นมาแบบนี้
     /// </summary>
     [HttpPost]
     [ApiVersion("1.0")]
@@ -45,47 +49,11 @@ public class EmailQueueController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
     public async Task<IActionResult> InsertEmailQueue([FromBody] List<EmailQueueRequest> queues)
     {
-        //อยากจะหาน้องมาช่วยทำ Extract Service ให้สวย ๆ ที่ EmailService
         try
         {
             _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
-
-            var userId = _applicationUser.UserId;
-            var result = new List<EmailQueueResponse>();
-            foreach (var queue in queues)
-            {
-                var queueId = _generator.GenerateUlid();
-                var messageId = _generator.GenerateUlid();
-
-                var queueEmail = new EmailQueue()
-                {
-                    QueueId = queueId,
-                    EmailFrom = queue.EmailFrom,
-                    EmailTo = queue.EmailTo,
-                    EmailCc = queue.EmailCc ?? string.Empty,
-                    RefAccPolicyId = userId,
-                    IsTest = _appSetting.IsTest,
-                };
-                var message = new Message()
-                {
-                    MessageId = messageId,
-                    EmailSubject = queue.Subject,
-                    EmailBody = queue.Body,
-                };
-                _emailDataService.EmailQueueRepository.Add(queueEmail);
-                _emailDataService.MessageRepository.Add(message);
-
-                result.Add(new EmailQueueResponse()
-                {
-                    QueueId = queueId,
-                    Subject = queue.Subject,
-                    EmailTo = queue.EmailTo
-                });
-            }
-
-#pragma warning disable CS4014
-            Task.Run(async () => await _emailDataService.SaveChangeAsync()).ConfigureAwait(false);
-#pragma warning restore CS4014
+            //ข้างใน Method แตก Thread แล้่ว
+            var result = _emailQueueService.InsertQueue(queues);
 
             return StatusCode(StatusCodes.Status201Created, result);
         }
@@ -112,27 +80,12 @@ public class EmailQueueController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
     public async Task<IActionResult> CancelEmailQueue([FromBody] List<CancelEmailQueueRequest> queues)
     {
-        //อยากจะหาน้องมาช่วยทำ Extract Service ให้สวย ๆ ที่ EmailService
         try
         {
             _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
-            
-#pragma warning disable CS4014
-            Task.Run(async () =>
-            {
-                //_emailDataService.EmailQueueRepository.Query(x=>queue.Contain(x.QueueId)) => แบบนี้ Performance น่าจะไม่ดี
-                var newMessages = _emailDataService.EmailQueueRepository.Query(x => x.Status == QueueStatus.New).ToList();
-                foreach (var message in newMessages)
-                {
-                    if (queues.Any(x => x.QueueId == message.QueueId))
-                    {
-                        message.Status = QueueStatus.Canceled;
-                        _emailDataService.EmailQueueRepository.Update(message);
-                    }
-                }
 
-                await _emailDataService.SaveChangeAsync().ConfigureAwait(false);
-            });
+#pragma warning disable CS4014
+            Task.Run(async ()=>await _emailQueueService.CancelQueue(queues)).ConfigureAwait(false);
 #pragma warning restore CS4014
             
             return StatusCode(StatusCodes.Status202Accepted);
