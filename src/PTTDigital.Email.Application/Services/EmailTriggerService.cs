@@ -51,7 +51,7 @@ public class EmailTriggerService : IEmailTriggerService
 
     public bool IsValidEmailAddressFormat(string emailAddress)
     {
-        //ไม่แน่ใจว่าต้องถอด const ออกมาข้างนอกไหมเพราะมันไม่มีทางเปลี่ยนแน่ ๆ ในอนาคต
+        //Todo:ไม่แน่ใจว่าต้องถอด const ออกมาข้างนอกไหมเพราะมันไม่มีทางเปลี่ยนแน่ ๆ ในอนาคต
         const string matchEmailPattern = @"^(([\w-]+\.)+[\w-]+|([a-zA-Z]{1}|[\w-]{2,}))@"
                                          + @"((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\.([0-1]?
 				                                    [0-9]{1,2}|25[0-5]|2[0-4][0-9])\."

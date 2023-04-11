@@ -50,17 +50,16 @@ namespace PTTDigital.Email.Application.Services
                     EmailTo = queue.EmailTo,
                     EmailCc = queue.EmailCc ?? string.Empty,
                     RefAccPolicyId = userId,
-                    //กรณ๊ Deploy มาแล้วเป็น Centralized เราสามารถยิง Test แยกรายครั้งได้
+                    //กรณี Deploy มาแล้วเป็น Centralized เราสามารถยิง Test แยกรายครั้งได้
                     IsTest = _appSetting.IsTest ? _appSetting.IsTest : queue.IsTest,
-                };
-                var message = new Message()
-                {
-                    MessageId = messageId,
-                    EmailSubject = queue.Subject,
-                    EmailBody = queue.Body,
+                    Message = new Message()
+                    {
+                        MessageId = messageId,
+                        EmailSubject = queue.Subject,
+                        EmailBody = queue.Body,
+                    }
                 };
                 _emailDataService.EmailQueueRepository.Add(queueEmail);
-                _emailDataService.MessageRepository.Add(message);
 
                 result.Add(new EmailQueueResponse()
                 {
@@ -124,7 +123,7 @@ namespace PTTDigital.Email.Application.Services
             {
                 return;
             }
-            //ท่อนนี้ช่วยดู SQL Profiler ให้ด้วยครับ
+            //Todo:ท่อนนี้ช่วยดู SQL Profiler ให้ด้วยครับ
             var messagesLst = _emailDataService.MessageRepository.Query(x => newMails.Any(y => y.MessageId == x.MessageId)).ToListAsync();
 
             newMails.ForEach(x => x.Status = QueueStatus.Queueing);
@@ -195,7 +194,7 @@ namespace PTTDigital.Email.Application.Services
                         _emailDataService.EmailQueueRepository.Update(mail);
                         _ = _emailDataService.SaveChangeAsync().Result;
                         _logger.LogError($"Send Mail Error Subject:{msg?.EmailSubject} To:{mailTo}");
-                        //ฝากแก้ HardCode ด้วยครับ
+                        //Todo:ฝากแก้ HardCode ด้วยครับ
                         _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom,
                             $"PPE EmailAPI Smtp Error",
                             $"Send Mail Error Subject:{msg?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}\nException:{exception.Message}"
@@ -208,7 +207,7 @@ namespace PTTDigital.Email.Application.Services
                     _emailDataService.EmailQueueRepository.Update(mail);
                     _ = _emailDataService.SaveChangeAsync().Result;
                     _logger.LogError($"Validate Mail Error Subject:{msg?.EmailSubject} To:{mailTo}");
-                    //ฝากแก้ HardCode ด้วยครับ
+                    //Todo: ฝากแก้ HardCode ด้วยครับ
                     _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom,
                         $"PPE EmailAPI ValidateMail Error",
                         $"Validate Mail Error Subject:{msg?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}"

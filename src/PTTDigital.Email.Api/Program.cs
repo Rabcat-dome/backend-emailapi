@@ -17,6 +17,7 @@ using System.IO.Compression;
 using Microsoft.AspNetCore.ResponseCompression;
 using PTTDigital.Email.Api.Middleware;
 using Hangfire;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,11 +101,17 @@ if (app.Environment.IsDevelopment())
 }
 
 //hangfile
-var options = new DashboardOptions()
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    Authorization = new[] { new MyAuthorizationFilter() }
-};
-app.UseHangfireDashboard("/hangfire", options);
+    DashboardTitle = "My PPE",
+    Authorization = new[]
+    {
+        new HangfireCustomBasicAuthenticationFilter{
+            User = "Admin",
+            Pass = "Password"
+        }
+    }
+});
 //
 
 app.UseMiddleware<TimestampMiddleware>();

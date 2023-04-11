@@ -34,7 +34,7 @@ public class EmailQueueController : ControllerBase
     /// </summary>
     [HttpPost]
     [ApiVersion("1.0")]
-    //[Authorize] //ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
+    //[Authorize] //Todo:ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
     [Route("[action]")]
     [ProducesResponseType(StatusCodes.Status202Accepted, Type = typeof(List<EmailQueueResponse>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
@@ -65,7 +65,7 @@ public class EmailQueueController : ControllerBase
     /// </summary>
     [HttpPatch]
     [ApiVersion("1.0")]
-    [Authorize] //ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
+    [Authorize] //Todo:ยังไม่คุมสิทธิ์ไปก่อน  เดี๋ยวขอความชัดเจน
     [Route("[action]")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<CancelEmailQueueRequest>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(string))]
