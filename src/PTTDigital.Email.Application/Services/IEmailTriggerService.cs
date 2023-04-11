@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 
 namespace PTTDigital.Email.Application.Services
 {
@@ -12,6 +7,6 @@ namespace PTTDigital.Email.Application.Services
         List<MailAddress> ConvertToMailAddresses(string data);
         bool Validate(IList<MailAddress> toAddresses, IList<MailAddress> cCAddresses, string @from, string subject, string body);
         bool IsValidEmailAddressFormat(string emailAddress);
-        Task SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment> attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses);
+        Task SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment>? attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses);
     }
 }

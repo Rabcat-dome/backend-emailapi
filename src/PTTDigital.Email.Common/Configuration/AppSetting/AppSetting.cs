@@ -38,6 +38,8 @@ public class AppSetting : IAppSetting
     public string? AdminEmail { get; set; }
     public int SMTPPort { get; set; } = 25;
     public string? SMTPServer { get; set; }
+    public string? DefaultMail { get; set; }
+    public string? DefaultMailDisplay { get; set; }
     public string[]? AllowOrigins { get; set; }
 
     public string? UserInGroup { get; set; }

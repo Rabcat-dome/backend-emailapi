@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PTTDigital.Email.Application.ViewModels.Requests
+﻿namespace PTTDigital.Email.Application.ViewModels.Requests
 {
     public class EmailQueueRequest
     {
@@ -14,5 +8,6 @@ namespace PTTDigital.Email.Application.ViewModels.Requests
         public string Subject { get; set; }
         public string Body { get; set; }
         public bool IsHtmlFormat { get; set; } = true;
+        public bool IsTest { get; set; } = false;
     }
 }

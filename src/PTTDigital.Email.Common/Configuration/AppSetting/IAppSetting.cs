@@ -23,6 +23,8 @@ public interface IAppSetting
     string? AdminEmail { get; set; }
     int SMTPPort { get; set; }
     string? SMTPServer { get; set; }
+    string? DefaultMail { get; set; }
+    string? DefaultMailDisplay { get; set; }
     string[]? AllowOrigins { get; }
     string? UserInGroup { get; }
 

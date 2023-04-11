@@ -18,7 +18,7 @@ namespace PTTDigital.Email.Data.Models
         [MaxLength(36)]
         public string QueueId { get; set; }
         [MaxLength(4000)]
-        public string EmailFrom { get; set; }
+        public string EmailFrom { get; set; }//MailDisplay no Encrypt
         [MaxLength(4000)]
         public string EmailTo { get; set; }
         [MaxLength(4000)]

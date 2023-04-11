@@ -39,11 +39,11 @@ public class EmailTriggerService : IEmailTriggerService
     //เพื่อยืนยันว่ามี Attribute เพียงพอต่อการส่งงาน
     public bool Validate(IList<MailAddress> toAddresses, IList<MailAddress> cCAddresses, string from, string subject, string body)
     {
-        if (string.IsNullOrEmpty(subject))
+        if (string.IsNullOrWhiteSpace(subject))
             return false;
-        if (string.IsNullOrEmpty(body))
+        if (string.IsNullOrWhiteSpace(body))
             return false;
-        if (string.IsNullOrEmpty(from))
+        if (string.IsNullOrWhiteSpace(from))
             return false;
 
         return toAddresses?.Count > 0 | cCAddresses?.Count > 0;
@@ -61,31 +61,20 @@ public class EmailTriggerService : IEmailTriggerService
         return !string.IsNullOrWhiteSpace(emailAddress) && Regex.IsMatch(emailAddress, matchEmailPattern);
     }
 
-    public async Task SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment> attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses)
+    public async Task SendMail(string from, string display, string subject, string body, bool isHtml, IList<Attachment>? attachments, IList<MailAddress> toAddresses, IList<MailAddress> ccAddresses)
     {
         ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
         using var smtpClient = new SmtpClient(_appSetting.SMTPServer);
         using var mailMessage = new MailMessage();
 
-        if (_appSetting.IsTest)
-        {
-            _logger.LogTrace($"smtp TestMode {subject}");
-            toAddresses = ConvertToMailAddresses(_appSetting.AdminEmail ?? string.Empty);
-
-            if (!toAddresses.Any())
-            {
-                _logger.LogTrace($"Can't send mail because empty AdminEmail");
-                return;
-            }
-        }
         foreach (var item in toAddresses)
         {
             mailMessage.To.Add(item);
         }
         foreach (var item in ccAddresses)
         {
-            if (_appSetting.IsTest) { break; }
+            //if (_appSetting.IsTest) { break; }  ขอทดไว้
             mailMessage.CC.Add(item);
         }
 
@@ -94,10 +83,11 @@ public class EmailTriggerService : IEmailTriggerService
         mailMessage.IsBodyHtml = isHtml;
         mailMessage.Body = body.Replace("\\n", "\n").Replace("\\t", "\t");
 
-        foreach (var attachment in attachments)
-        {
-            mailMessage.Attachments.Add(attachment);
-        }
+        if (attachments != null)
+            foreach (var attachment in attachments)
+            {
+                mailMessage.Attachments.Add(attachment);
+            }
 
         await smtpClient.SendMailAsync(mailMessage, CancellationToken.None);
     }

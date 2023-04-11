@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using PTTDigital.Email.Application.Services;
 using PTTDigital.Email.Application.ViewModels.Requests;
 using PTTDigital.Email.Application.ViewModels.Responses;
-using PTTDigital.Email.Common.ApplicationUser.User;
-using PTTDigital.Email.Common.Configuration.AppSetting;
 using PTTDigital.Email.Common.Exception;
 using PTTDigital.Email.Common.Helper.LogExtension;
 using PTTDigital.Email.Data.Models;
@@ -18,21 +16,15 @@ namespace PTTDigital.Email.Api.Controllers;
 [Route("api/v{version:apiVersion}/Email/[controller]")]
 public class EmailQueueController : ControllerBase
 {
-    private readonly IApplicationUser _applicationUser;
+    public IGenerator Generator { get; }
     private readonly ILogger<EmailQueueController> _logger;
-    private readonly IEmailDataService _emailDataService;
     private readonly IEmailQueueService _emailQueueService;
-    private readonly IGenerator _generator;
-    private readonly IAppSetting _appSetting;
 
-    public EmailQueueController(IApplicationUser applicationUser, ILogger<EmailQueueController> logger, IEmailDataService emailDataService,IEmailQueueService emailQueueService, IGenerator generator, IAppSetting appSetting)
+    public EmailQueueController(ILogger<EmailQueueController> logger,IEmailQueueService emailQueueService, IGenerator generator)
     {
-        this._applicationUser = applicationUser;
+        Generator = generator;
         _logger = logger;
-        _emailDataService = emailDataService;
         _emailQueueService = emailQueueService;
-        _generator = generator;
-        _appSetting = appSetting;
     }
 
     /// <summary>
@@ -85,9 +77,9 @@ public class EmailQueueController : ControllerBase
             _logger.Log(LogLevel.Debug, LogEvents.Controller, queues);
 
 #pragma warning disable CS4014
-            Task.Run(async ()=>await _emailQueueService.CancelQueue(queues)).ConfigureAwait(false);
+            _emailQueueService.CancelQueue(queues).ConfigureAwait(false);
 #pragma warning restore CS4014
-            
+
             return StatusCode(StatusCodes.Status202Accepted);
         }
         catch (AuthorizationException ex)
