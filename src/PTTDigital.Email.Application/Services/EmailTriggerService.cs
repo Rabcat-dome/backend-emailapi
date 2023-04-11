@@ -74,7 +74,6 @@ public class EmailTriggerService : IEmailTriggerService
         }
         foreach (var item in ccAddresses)
         {
-            //if (_appSetting.IsTest) { break; }  ขอทดไว้
             mailMessage.CC.Add(item);
         }
 

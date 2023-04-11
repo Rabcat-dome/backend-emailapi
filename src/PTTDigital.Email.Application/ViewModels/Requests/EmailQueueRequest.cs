@@ -2,7 +2,7 @@
 {
     public class EmailQueueRequest
     {
-        public string EmailFrom { get; set; } //"email1@ptt.com;email2@ptt.com;"
+        public string EmailFrom { get; set; } //"email1@ptt.com|email2@ptt.com;"
         public string EmailTo { get; set; }
         public string? EmailCc { get; set; }
         public string Subject { get; set; }

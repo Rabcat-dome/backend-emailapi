@@ -120,13 +120,13 @@ namespace PTTDigital.Email.Application.Services
             }
 
             var newMails = newMailsAsync.Result;
-            //ท่อนนี้ช่วยดู SQL Profiler ให้ด้วยครับ
-            var messagesLst = _emailDataService.MessageRepository.Query(x => newMails.Any(y => y.MessageId == x.MessageId)).ToListAsync();
-
             if (!newMails.Any())
             {
                 return;
             }
+            //ท่อนนี้ช่วยดู SQL Profiler ให้ด้วยครับ
+            var messagesLst = _emailDataService.MessageRepository.Query(x => newMails.Any(y => y.MessageId == x.MessageId)).ToListAsync();
+
             newMails.ForEach(x => x.Status = QueueStatus.Queueing);
             _emailDataService.EmailQueueRepository.UpdateRange(newMails);
 
@@ -175,7 +175,7 @@ namespace PTTDigital.Email.Application.Services
                             msg!.EmailBody!, mail.IsHtmlFormat, null, _appSetting.IsTest ? adminMail : mailTo, mailCc);
                         mail.Status = QueueStatus.Completed;
                         mail.Sent = DateTime.Now;
-                        mail.IsTest = true;
+                        mail.IsTest = _appSetting.IsTest || mail.IsTest;
                         _emailDataService.EmailQueueRepository.Update(mail);
                         _ = _emailDataService.SaveChangeAsync().Result;
                     }

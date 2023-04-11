@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PTTDigital.Email.Application.Services;
+using PTTDigital.Email.Common.ApplicationUser;
 using PTTDigital.Email.Common.EncryptDecrypt.Cryptography;
 using PTTDigital.Email.Data.Service;
 using PTTDigital.Email.Data.SqlServer.Context;
@@ -17,6 +19,7 @@ public static class DependencyInjectionExtension
         builder.Services.AddScoped<IEmailQueueService, EmailQueueService>();
         builder.Services.AddScoped<IEmailTriggerService, EmailTriggerService>();
         builder.Services.AddScoped<IEncryptDecryptHelper, EncryptDecryptHelper>();
+        builder.Services.RemoveAll<IJwtManager>().TryAddScoped<IJwtManager, JwtManager>();
 
         builder.Services.AddScoped<IEmailDataService>(service =>
         {
