@@ -10,7 +10,6 @@ using PTTDigital.Email.Common.Configuration.AppSetting.API;
 using PTTDigital.Email.Common.KeyVault;
 using PTTDigital.Email.Data.SqlServer.Context;
 using PTTDigital.Email.Data.Service.Connection;
-using PTTDigital.Authentication.Api.HealthCheck;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
@@ -19,6 +18,7 @@ using PTTDigital.Email.Api.Middleware;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PTTDigital.Email.Api.HealthCheck;
 
 var builder = WebApplication.CreateBuilder(args);
 

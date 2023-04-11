@@ -1,4 +1,4 @@
-﻿namespace PTTDigital.Email.Data.Repository;
+﻿namespace PTTDigital.Email.Data.Service;
 
 public interface IEventMessage
 {

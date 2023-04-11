@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using PTTDigital.Email.Api.HealthCheck;
-using PTTDigital.Email.Common.Configuration.AppSetting;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using PTTDigital.Email.Common.Configuration.AppSetting;
 
-namespace PTTDigital.Authentication.Api.HealthCheck;
+namespace PTTDigital.Email.Api.HealthCheck;
 
 internal static class HealthCheckConfigurationExtention
 {
