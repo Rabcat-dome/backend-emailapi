@@ -92,7 +92,7 @@ namespace PTTDigital.Email.Application.Services
         //Method นี้จะถูกเรียกโดย Job เป็น infinite Loop ดังนั้นถ้าใช้ Exception ต้องมีวิธีจัดการ
         public void TriggerMail()
         {
-            var newMailsAsync = _emailDataService.EmailQueueRepository.Query(x => x.Status == QueueStatus.New).ToListAsync();
+            var newMailsAsync = _emailDataService.EmailQueueRepository.Query(x => x.Status == QueueStatus.New).Include(x=>x.Message).ToListAsync();
             List<MailAddress> adminMail = _emailTriggerService.ConvertToMailAddresses(_appSetting.AdminEmail ?? string.Empty);
 
             _logger.LogTrace($"AdminMail CountBeforeCheck {adminMail.Count}");
@@ -123,8 +123,6 @@ namespace PTTDigital.Email.Application.Services
             {
                 return;
             }
-            //Todo:ท่อนนี้ช่วยดู SQL Profiler ให้ด้วยครับ
-            var messagesLst = _emailDataService.MessageRepository.Query(x => newMails.Any(y => y.MessageId == x.MessageId)).ToListAsync();
 
             newMails.ForEach(x => x.Status = QueueStatus.Queueing);
             _emailDataService.EmailQueueRepository.UpdateRange(newMails);
@@ -164,14 +162,12 @@ namespace PTTDigital.Email.Application.Services
                     }
                 }
 
-                var msg = (messagesLst.Result).FirstOrDefault(x => x.MessageId == mail.MessageId);
-
-                if (_emailTriggerService.Validate(mailTo, mailCc, mail.EmailFrom, msg?.EmailSubject ?? string.Empty, msg?.EmailBody ?? string.Empty))
+                if (_emailTriggerService.Validate(mailTo, mailCc, mail.EmailFrom, mail.Message?.EmailSubject ?? string.Empty, mail.Message?.EmailBody ?? string.Empty))
                 {
                     try
                     {
-                        _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom, msg!.EmailSubject!,
-                            msg!.EmailBody!, mail.IsHtmlFormat, null, _appSetting.IsTest ? adminMail : mailTo, mailCc);
+                        _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom, mail.Message!.EmailSubject!,
+                            mail.Message!.EmailBody!, mail.IsHtmlFormat, null, _appSetting.IsTest ? adminMail : mailTo, mailCc);
                         mail.Status = QueueStatus.Completed;
                         mail.Sent = DateTime.Now;
                         mail.IsTest = _appSetting.IsTest || mail.IsTest;
@@ -193,11 +189,11 @@ namespace PTTDigital.Email.Application.Services
 
                         _emailDataService.EmailQueueRepository.Update(mail);
                         _ = _emailDataService.SaveChangeAsync().Result;
-                        _logger.LogError($"Send Mail Error Subject:{msg?.EmailSubject} To:{mailTo}");
+                        _logger.LogError($"Send Mail Error Subject:{mail.Message?.EmailSubject} To:{mailTo}");
                         //Todo:ฝากแก้ HardCode ด้วยครับ
                         _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom,
                             $"PPE EmailAPI Smtp Error",
-                            $"Send Mail Error Subject:{msg?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}\nException:{exception.Message}"
+                            $"Send Mail Error Subject:{mail.Message?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}\nException:{exception.Message}"
                             , false, null, adminMail, new List<MailAddress>());
                     }
                 }
@@ -206,11 +202,11 @@ namespace PTTDigital.Email.Application.Services
                     mail.Status = QueueStatus.Failed;
                     _emailDataService.EmailQueueRepository.Update(mail);
                     _ = _emailDataService.SaveChangeAsync().Result;
-                    _logger.LogError($"Validate Mail Error Subject:{msg?.EmailSubject} To:{mailTo}");
+                    _logger.LogError($"Validate Mail Error Subject:{mail.Message?.EmailSubject} To:{mailTo}");
                     //Todo: ฝากแก้ HardCode ด้วยครับ
                     _emailTriggerService.SendMail(strMailFrom!.Address!, mail.EmailFrom,
                         $"PPE EmailAPI ValidateMail Error",
-                        $"Validate Mail Error Subject:{msg?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}"
+                        $"Validate Mail Error Subject:{mail.Message?.EmailSubject} To:{mailTo}\nQueueId:{mail.QueueId} MessageId:{mail.MessageId}"
                         , false, null, adminMail, new List<MailAddress>());
                 }
             }
@@ -240,7 +236,7 @@ namespace PTTDigital.Email.Application.Services
                     IsTest = doneMail.IsTest,
                     MessageId = doneMail.MessageId,
                 };
-                _emailDataService.EmailArchiveRepository.Update(archiveMail);
+                _emailDataService.EmailArchiveRepository.Add(archiveMail);
             }
 
             _emailDataService.EmailQueueRepository.RemoveRange(doneMails);
