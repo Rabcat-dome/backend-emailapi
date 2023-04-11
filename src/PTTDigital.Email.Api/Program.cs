@@ -89,7 +89,7 @@ builder.AddLogger();
 //hangfile
 builder.Services.AddHangfire(config =>
     //หาน้องมาปรับ HardCode ตรงนี้ให้หน่อยครับ
-    config.UseSqlServerStorage("Server=pttgc-poc.database.windows.net,1433;Database=ppe;User Id=ppe;Password=8yGH@#4Ut2o0;"));
+    config.UseSqlServerStorage(builder.Configuration.GetRequiredSection("HangfireConnectionString").Get<string>()));
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
@@ -107,8 +107,8 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     Authorization = new[]
     {
         new HangfireCustomBasicAuthenticationFilter{
-            User = "Admin",
-            Pass = "Password"
+            User = builder.Configuration.GetRequiredSection("HangfireUsername").Get<string>(),
+            Pass = builder.Configuration.GetRequiredSection("HangfirePassword").Get<string>()
         }
     }
 });

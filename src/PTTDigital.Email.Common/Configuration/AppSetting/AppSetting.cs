@@ -45,6 +45,9 @@ public class AppSetting : IAppSetting
     public string? UserInGroup { get; set; }
 
     public string? TbSysPermissions { get; set; }
+    public string? HangfireConnectionString { get; set; }
+    public string? HangfireUsername { get; set; }
+    public string? HangfirePassword { get; set; }
 
     private string GetKey(string value)
     {

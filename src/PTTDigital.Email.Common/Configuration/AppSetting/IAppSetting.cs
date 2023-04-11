@@ -27,6 +27,8 @@ public interface IAppSetting
     string? DefaultMailDisplay { get; set; }
     string[]? AllowOrigins { get; }
     string? UserInGroup { get; }
-
     string? TbSysPermissions { get; }
+    string? HangfireConnectionString { get; set; }
+    string? HangfireUsername { get; set; }
+    string? HangfirePassword { get; set; }
 }
