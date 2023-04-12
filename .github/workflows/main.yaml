@@ -1,0 +1,126 @@
+name: "Main"
+
+on:
+  workflow_dispatch:
+    inputs:
+      input_image_tag:
+        description: "Commit short sha id of non prod do you want to deploy."
+        type: string
+        required: true
+
+jobs:
+  Validate-Jobs:
+    runs-on: ${{ VARS.RUNS_ON_SELF_HOST }}
+    environment: uat
+    steps:
+      - run: echo "Validate Jobs"
+
+  Release-Tag-Container-UAT:
+    needs: ["Validate-Jobs"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Release_Tag_Container.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      image_pre_release_repo_url: ${{ VARS.QAS_IMAGE_RELEASE_REPO_URL }}
+      image_release_repo_url: ${{ VARS.UAT_IMAGE_RELEASE_REPO_URL }}
+      deploy_on_env: "uat"
+      input_image_tag: ${{ inputs.input_image_tag }}
+      shell_type: "bash"
+    secrets:
+      IMAGE_PRE_RELEASE_REPO_USERNAME: ${{ secrets.QAS_ASP_CLIENT_ID }}
+      IMAGE_PRE_RELEASE_REPO_PASSWORD: ${{ secrets.QAS_ASP_CLIENT_SECRET }}
+      IMAGE_RELEASE_REPO_USERNAME: ${{ secrets.UAT_ASP_CLIENT_ID }}
+      IMAGE_RELEASE_REPO_PASSWORD: ${{ secrets.UAT_ASP_CLIENT_SECRET }}
+
+  Deploy-UAT:
+    needs: ["Release-Tag-Container-UAT"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Deploy_AKS.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      deploy_on_env: "uat"
+      image_repo_url: ${{ VARS.UAT_IMAGE_RELEASE_REPO_URL }}
+      aks_resource_group_name: ${{ VARS.UAT_AKS_RESOURCE_GROUP_NAME }}
+      aks_name: ${{ VARS.UAT_AKS_NAME }}
+      helm_chart_repo: ${{ VARS.HELM_CHART_REPO }}
+    secrets:
+      AZ_ASP_CLIENT_ID: ${{ secrets.UAT_ASP_CLIENT_ID }}
+      AZ_ASP_CLIENT_SECRET: ${{ secrets.UAT_ASP_CLIENT_SECRET }}
+      AZ_TENANT_ID: ${{ secrets.UAT_ASP_TENANT_ID }}
+      AZ_SUBSCRIPTION_ID: ${{ secrets.UAT_ASP_SUB_ID }}
+      HELM_REPO_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+
+  Health-Check-UAT:
+    needs: ["Deploy-UAT"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Health_Check.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      allow_failure: ${{ fromJSON(VARS.ALLOW_FAILURE_HEALTH_CHECK_UAT) }}
+      hostname: ${{ VARS.UAT_HOSTNAME }}
+      protocol: ${{ VARS.UAT_PROTOCOL == null && 'https' || VARS.UAT_PROTOCOL }}
+
+  Automate-Test-UAT:
+    needs: ["Health-Check-UAT"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Automate_Test_Robot_Framework.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      allow_failure: ${{ fromJSON(VARS.ALLOW_FAILURE_AUTOMATE_TEST_UAT) }}
+      deploy_on_env: "uat"
+      hostname: ${{ VARS.UAT_HOSTNAME }}
+      protocol: ${{ VARS.UAT_PROTOCOL == null && 'https' || VARS.UAT_PROTOCOL }}
+
+  Performance-Test:
+    needs: ["Automate-Test-UAT"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Performance_Test.yml@main
+    with:
+      jmeter_error_percentage: ${{ fromJSON(VARS.JMETER_ERROR_PERCENTAGE) }}
+      allow_failure: ${{ fromJSON(VARS.ALLOW_FAILURE_PERFORMANCE_TEST_JMETER) }}
+      hostname: ${{ VARS.UAT_HOSTNAME }}
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+
+  Start-PRD:
+    needs: ["Performance-Test"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Manual_Start.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      manual_start_on_env: "prd"
+
+  Release-Tag-Container-Prd:
+    needs: ["Start-PRD"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Release_Tag_Container.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      image_pre_release_repo_url: ${{ VARS.UAT_IMAGE_RELEASE_REPO_URL }}
+      image_release_repo_url: ${{ VARS.PRD_IMAGE_RELEASE_REPO_URL }}
+      deploy_on_env: "prd"
+      input_image_tag: ${{ inputs.input_image_tag }}
+      shell_type: "bash"
+    secrets:
+      IMAGE_PRE_RELEASE_REPO_USERNAME: ${{ secrets.UAT_ASP_CLIENT_ID }}
+      IMAGE_PRE_RELEASE_REPO_PASSWORD: ${{ secrets.UAT_ASP_CLIENT_SECRET }}
+      IMAGE_RELEASE_REPO_USERNAME: ${{ secrets.PRD_ASP_CLIENT_ID }}
+      IMAGE_RELEASE_REPO_PASSWORD: ${{ secrets.PRD_ASP_CLIENT_SECRET }}
+
+  Deploy-PRD:
+    needs: ["Release-Tag-Container-Prd"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Deploy_AKS.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      deploy_on_env: "prd"
+      image_repo_url: ${{ VARS.PRD_IMAGE_RELEASE_REPO_URL }}
+      aks_resource_group_name: ${{ VARS.PRD_AKS_RESOURCE_GROUP_NAME }}
+      aks_name: ${{ VARS.PRD_AKS_NAME }}
+      helm_chart_repo: ${{ VARS.HELM_CHART_REPO }}
+    secrets:
+      AZ_ASP_CLIENT_ID: ${{ secrets.PRD_ASP_CLIENT_ID }}
+      AZ_ASP_CLIENT_SECRET: ${{ secrets.PRD_ASP_CLIENT_SECRET }}
+      AZ_TENANT_ID: ${{ secrets.PRD_ASP_TENANT_ID }}
+      AZ_SUBSCRIPTION_ID: ${{ secrets.PRD_ASP_SUB_ID }}
+      HELM_REPO_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+
+  Health-Check-Prd:
+    needs: ["Deploy-PRD"]
+    uses: PTTGC-DevSecOps/global-pipeline/.github/workflows/Health_Check.yml@main
+    with:
+      runs_on_host: ${{ VARS.RUNS_ON_SELF_HOST }}
+      allow_failure: ${{ fromJSON(VARS.ALLOW_FAILURE_HEALTH_CHECK_PRD) }}
+      hostname: ${{ VARS.PRD_HOSTNAME }}
+      protocol: ${{ VARS.PRD_PROTOCOL == null && 'https' || VARS.PRD_PROTOCOL }}

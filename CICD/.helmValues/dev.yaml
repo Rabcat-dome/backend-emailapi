@@ -22,7 +22,7 @@ env:
     value: "01GWB8DB47JB3HAT6XX0TBSQBD"
     
   - name: PTT_PPE_EMAIL_API_AppName
-    value: "Authorization API"
+    value: "Email API"
     
   - name: PTT_PPE_EMAIL_API_SymmetricKey
     value: "P@ssw0rd"
@@ -38,7 +38,22 @@ env:
     
   - name: PTT_PPE_EMAIL_API_ClientConfigs__SessionTokenExpireInHour
     value: 24
-    
+
+  - name: PTT_PPE_EMAIL_API_AdminEmail
+    value: "visarut.p@pttdigital.com|zsukhum.ud@pttdigital.com|nalatthawan.w@pttdigital.com"
+
+  - name: PTT_PPE_EMAIL_API_DefaultMail
+    value: "PPEOnline_Support@pttdigital.com"
+
+  - name: PTT_PPE_EMAIL_API_DefaultMailDisplay
+    value: "PPEOnline_Support"
+
+  - name: PTT_PPE_EMAIL_API_SMTPServer
+    value: "pttapp2smtp.ptt.corp"
+
+  - name: PTT_PPE_EMAIL_API_SMTPPort
+    value: 25
+
   - name: PTT_PPE_EMAIL_API_UseInMemory
     value: false
     
@@ -83,9 +98,6 @@ env:
     
   - name: PTT_PPE_EMAIL_API_ApiClients__ApiGraph__BaseUri
     value: "https://graph.microsoft.com"
-    
-  - name: PTT_PPE_EMAIL_API_ApiClients__ApiPpe__BaseUri
-    value: "http://localhost:5026"
     
   - name: PTT_PPE_EMAIL_API_ApiClients__ApiPpe__ApiKey
     value: "03655239-1ef0-4970-929c-1e0991cb39d2"
