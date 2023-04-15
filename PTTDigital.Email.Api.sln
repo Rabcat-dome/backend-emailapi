@@ -11,17 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F3A85E23-0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Api", "src\PTTDigital.Email.Api\PTTDigital.Email.Api.csproj", "{D7AEAE6B-647B-4E78-8341-21A4B496DE32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.Application", "src\PTTDigital.Email.Application\PTTDigital.Email.Application.csproj", "{EED7A5B5-F17C-4CA7-B0E2-2CC5699DD0CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Application", "src\PTTDigital.Email.Application\PTTDigital.Email.Application.csproj", "{EED7A5B5-F17C-4CA7-B0E2-2CC5699DD0CB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Common", "src\PTTDigital.Email.Common\PTTDigital.Email.Common.csproj", "{5124CE21-85BC-4F6D-81ED-FEAAAFFC19FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.Data", "src\Infrastructures\PTTDigital.Email.Data\PTTDigital.Email.Data.csproj", "{DA75E67C-A8A5-4C40-B722-4F21DF0508BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Data", "src\Infrastructures\PTTDigital.Email.Data\PTTDigital.Email.Data.csproj", "{DA75E67C-A8A5-4C40-B722-4F21DF0508BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.Data.SqlServer", "src\Infrastructures\PTTDigital.Email.Data.SqlServer\PTTDigital.Email.Data.SqlServer.csproj", "{D87C2B57-E127-49E5-800E-21249017295C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Data.SqlServer", "src\Infrastructures\PTTDigital.Email.Data.SqlServer\PTTDigital.Email.Data.SqlServer.csproj", "{D87C2B57-E127-49E5-800E-21249017295C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.Data.Migration", "src\Infrastructures\PTTDigital.Email.Data.Migration\PTTDigital.Email.Data.Migration.csproj", "{C3197A84-471A-4D20-B41A-AAE449E73368}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTTDigital.Email.Data.Migration", "src\Infrastructures\PTTDigital.Email.Data.Migration\PTTDigital.Email.Data.Migration.csproj", "{C3197A84-471A-4D20-B41A-AAE449E73368}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.UnitTests", "test\PTTDigital.Email.UnitTests\PTTDigital.Email.UnitTests.csproj", "{84FE71E1-2653-4A6C-BB67-730EE652E668}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTTDigital.Email.NUnitTest", "test\PTTDigital.Email.NUnitTest\PTTDigital.Email.NUnitTest.csproj", "{8EEA11B2-0B64-498A-9EFB-369D63893810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{C3197A84-471A-4D20-B41A-AAE449E73368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3197A84-471A-4D20-B41A-AAE449E73368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3197A84-471A-4D20-B41A-AAE449E73368}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84FE71E1-2653-4A6C-BB67-730EE652E668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84FE71E1-2653-4A6C-BB67-730EE652E668}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84FE71E1-2653-4A6C-BB67-730EE652E668}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84FE71E1-2653-4A6C-BB67-730EE652E668}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EEA11B2-0B64-498A-9EFB-369D63893810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EEA11B2-0B64-498A-9EFB-369D63893810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EEA11B2-0B64-498A-9EFB-369D63893810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EEA11B2-0B64-498A-9EFB-369D63893810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,7 +69,7 @@ Global
 		{DA75E67C-A8A5-4C40-B722-4F21DF0508BE} = {40A3935E-7CE7-49DE-A4A5-8481E69C6DE8}
 		{D87C2B57-E127-49E5-800E-21249017295C} = {40A3935E-7CE7-49DE-A4A5-8481E69C6DE8}
 		{C3197A84-471A-4D20-B41A-AAE449E73368} = {40A3935E-7CE7-49DE-A4A5-8481E69C6DE8}
-		{84FE71E1-2653-4A6C-BB67-730EE652E668} = {F3A85E23-0EF7-40DF-B76E-C2B41C1BE8EF}
+		{8EEA11B2-0B64-498A-9EFB-369D63893810} = {F3A85E23-0EF7-40DF-B76E-C2B41C1BE8EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {361AA3FE-E5F4-416B-ACBC-8E6B44C32646}
