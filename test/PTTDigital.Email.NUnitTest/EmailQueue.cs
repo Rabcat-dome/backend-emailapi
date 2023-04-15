@@ -1,4 +1,4 @@
-namespace PTTDigital.Email.NUnitTest
+﻿namespace PTTDigital.Email.NUnitTest
 {
     [TestFixture]
     public class EmailQueueTests
@@ -8,6 +8,7 @@ namespace PTTDigital.Email.NUnitTest
         {
         }
 
+        //ทดสอบการ InsertQueueService โดยการส่ง Parameter ลงไป จะต้องได้ Key ของ ulid ออกมา
         [Test]
         public void MethodName_Scenario_Result()
         {
@@ -21,5 +22,7 @@ namespace PTTDigital.Email.NUnitTest
             Assert.Pass();
             //Assert.That(true,Is.True);
         }
+
+        //ทดสอบ report ของ EmailQueue Service โดยตรวจสอบว่าต้องมี Data ทุก Column
     }
 }
