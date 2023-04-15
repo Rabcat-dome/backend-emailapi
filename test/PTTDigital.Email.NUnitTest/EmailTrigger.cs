@@ -1,7 +1,7 @@
 namespace PTTDigital.Email.NUnitTest
 {
     [TestFixture]
-    public class Tests
+    public class EmailTriggerTests
     {
         [SetUp]
         public void Setup()
