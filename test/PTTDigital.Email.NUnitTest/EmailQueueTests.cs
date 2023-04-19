@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+﻿using NUnit.Framework;
 using PTTDigital.Email.Data.Models;
 
 namespace PTTDigital.Email.NUnitTest
